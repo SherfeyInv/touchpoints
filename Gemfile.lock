@@ -489,7 +489,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.1)
+    rexml (3.4.4)
     rolify (6.0.1)
     rspec-core (3.13.3)
       rspec-support (~> 3.13.0)
@@ -539,7 +539,7 @@ GEM
     ruby-vips (2.2.3)
       ffi (~> 1.12)
       logger
-    rubyzip (2.4.1)
+    rubyzip (3.1.0)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -549,11 +549,11 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.4.1)
-    selenium-webdriver (4.31.0)
+    selenium-webdriver (4.35.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
+      rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
     sidekiq (8.0.3)
       connection_pool (>= 2.5.0)
@@ -689,7 +689,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   sassc-rails
-  selenium-webdriver
+  selenium-webdriver (>= 4.32.0)
   sidekiq (>= 6.5.0)
   simplecov
   sprockets-rails
@@ -702,4 +702,4 @@ RUBY VERSION
    ruby 3.3.4p94
 
 BUNDLED WITH
-   2.5.16
+   2.5.22

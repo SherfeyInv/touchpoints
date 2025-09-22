@@ -103,6 +103,6 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '>= 4.32.0'
   gem 'simplecov', require: false
 end
