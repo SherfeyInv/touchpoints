@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.3.4'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0"
+gem "rails", "~> 8.0", ">= 8.0.2.1"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -16,10 +16,10 @@ gem "pg"
 gem "puma"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails", ">= 2.0.0"
+gem "importmap-rails", ">= 2.2.0"
 
 # Hotwire"s SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+gem "turbo-rails", ">= 2.0.14"
 
 # Hotwire"s modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
@@ -51,7 +51,7 @@ gem 'carrierwave', '>= 2.2.1'
 gem 'csv'
 gem 'devise', '>= 4.8.1'
 gem 'fog-aws', '>= 3.15.0'
-gem "jbuilder"
+gem "jbuilder", ">= 2.14.0"
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'kramdown'
@@ -62,12 +62,12 @@ gem 'omniauth-github'
 gem 'omniauth_login_dot_gov', git: 'https://github.com/18F/omniauth_login_dot_gov.git', branch: 'main'
 gem 'omniauth-rails_csrf_protection'
 gem 'rack-attack'
-gem 'rack-cors', require: 'rack/cors'
+gem 'rack-cors', '>= 3.0.0', require: 'rack/cors'
 # Use Redis to cache Touchpoints in all envs
 gem 'redis-client'
 gem 'redis-namespace'
-gem 'sidekiq', '>= 6.5.0'
-gem 'json-jwt'
+gem 'sidekiq', '>= 8.0.4'
+gem 'json-jwt', '>= 1.17.0'
 gem 'aasm'
 gem 'logstop'
 gem 'paper_trail'
@@ -86,11 +86,11 @@ end
 group :development do
   gem 'aasm-diagram'
   gem "brakeman"
-  gem 'bullet'
+  gem 'bullet', '>= 8.0.6'
   gem "bundler-audit"
   gem 'listen'
   gem 'rails-erd'
-  gem "rubocop-rails"
+  gem "rubocop-rails", ">= 2.32.0"
   gem "rubocop-rspec"
   gem 'web-console'
 end
@@ -99,10 +99,10 @@ group :test do
   gem 'axe-core-rspec'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 6.5.0'
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 8.0.1'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
 end
