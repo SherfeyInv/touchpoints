@@ -414,8 +414,8 @@ GEM
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.14)
-    rack-attack (6.7.0)
+    rack (3.2.3)
+    rack-attack (6.8.0)
       rack (>= 1.0, < 4)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
@@ -676,7 +676,7 @@ DEPENDENCIES
   pg
   pry
   puma
-  rack-attack
+  rack-attack (>= 6.8.0)
   rack-cors
   rails (~> 8.0)
   rails-controller-testing
@@ -702,4 +702,4 @@ RUBY VERSION
    ruby 3.3.4p94
 
 BUNDLED WITH
-   2.5.16
+   2.5.22
