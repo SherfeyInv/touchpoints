@@ -52,7 +52,7 @@ gem 'csv'
 gem 'devise', '>= 4.8.1'
 gem 'fog-aws', '>= 3.15.0'
 gem "jbuilder"
-gem 'jquery-rails'
+gem 'jquery-rails', '>= 4.6.1'
 gem 'kaminari'
 gem 'kramdown'
 gem 'mail'
