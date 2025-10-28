@@ -70,7 +70,7 @@ gem 'sidekiq', '>= 6.5.0'
 gem 'json-jwt'
 gem 'aasm'
 gem 'logstop'
-gem 'paper_trail'
+gem 'paper_trail', '>= 17.0.0'
 gem 'acts-as-taggable-on'
 gem "rolify"
 
