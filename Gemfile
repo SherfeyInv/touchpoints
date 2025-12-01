@@ -87,7 +87,7 @@ group :development do
   gem 'aasm-diagram'
   gem "brakeman"
   gem 'bullet'
-  gem "bundler-audit"
+  gem "bundler-audit", ">= 0.9.3"
   gem 'listen'
   gem 'rails-erd'
   gem "rubocop-rails"
