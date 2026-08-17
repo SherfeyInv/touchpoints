@@ -8,12 +8,10 @@ module Api
           format.json do
             if current_user.organizational_admin?
               render json: current_user.organization.forms
-                .order(:id)
-                .limit(100), each_serializer: FormSerializer
+                .order(:id), each_serializer: FormSerializer
             else
               render json: current_user.forms
-                .order(:id)
-                .limit(100), each_serializer: FormSerializer
+                .order(:id), each_serializer: FormSerializer
             end
           end
         end
@@ -52,6 +50,59 @@ module Api
           end
         end
       end
+
+      def responses
+        valid_params = params.permit(:id, :start_date, :end_date, page: %i[number size])
+
+        if current_user.organizational_admin?
+          form = current_user.organization.forms.find_by_short_uuid(valid_params[:id])
+        else
+          form = current_user.forms.find_by_short_uuid(valid_params[:id])
+        end
+
+        render json: { error: { message: "no form with Short UUID of #{params[:id]}", status: 404 } }, status: :not_found and return if form.nil?
+
+        page_number = valid_params.dig(:page, :number).to_i.nonzero? || 1
+        page_size = valid_params.dig(:page, :size).to_i.nonzero? || 500
+        page_size = 500 if page_size <= 0
+        render json: { error: { message: "max page size is 5000", status: 400 } }, status: :bad_request and return if page_size > 5000
+
+        begin
+          start_date = Date.parse(valid_params[:start_date]) if valid_params[:start_date]
+          end_date = Date.parse(valid_params[:end_date]) if valid_params[:end_date]
+        rescue Date::Error
+          render json: { error: { message: "invalid date format, should be 'YYYY-MM-DD'", status: 400 } }, status: :bad_request and return
+        end
+
+        # base query
+        submissions = form.submissions.non_deleted
+
+        # apply date filters only when provided
+        if start_date && end_date
+          submissions = submissions.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+        elsif start_date
+          submissions = submissions.where(created_at: start_date.beginning_of_day..)
+        elsif end_date
+          submissions = submissions.where(created_at: ..end_date.end_of_day)
+        end
+
+        # ordering & pagination
+        submissions = submissions.order(:id).page(page_number).per(page_size)
+
+        render json: submissions, each_serializer: SubmissionSerializer,
+               meta: {
+                 current_page: submissions.current_page,
+                 page_size: submissions.limit_value,
+                 total_pages: submissions.total_pages,
+                 total_count: submissions.total_count,
+               },
+               links: {
+                 # If request came through the API gateway, pagination links should be written wrt the gateway url
+                 self: from_api_gateway? ? api_gateway_url : nil,
+               }
+      end
+
+      private
 
       def links(form, page, size)
         ret = {}

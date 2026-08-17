@@ -205,10 +205,10 @@ feature 'Forms', js: true do
         it 'can upload and display a logo' do
           expect(page).to have_css('.usa-file-input', wait: 10)
           within('.usa-file-input') do
-            attach_file('form_logo', 'spec/fixtures/touchpoints-banner.png')
+            attach_file('form_logo', 'spec/fixtures/files/touchpoints-banner.png')
           end
-          find('label', text: 'Display square (80px wide by 80px tall) logo?').click
-          click_on 'Update logo'
+          find('label', text: 'Display as square (80px wide by 80px tall)').click
+          click_on 'Update Logo Display'
           click_on 'Delivery'
           find('label', text: 'Hosted on touchpoints').click
           click_on 'Update Form'
@@ -234,10 +234,10 @@ feature 'Forms', js: true do
 
         it 'can upload and display a `square` logo' do
           within('.usa-file-input') do
-            attach_file('form_logo', 'spec/fixtures/touchpoints-banner.png')
+            attach_file('form_logo', 'spec/fixtures/files/touchpoints-banner.png')
           end
-          find('label', text: 'Display square (80px wide by 80px tall) logo?').click
-          click_on 'Update logo'
+          find('label', text: 'Display as square (80px wide by 80px tall)').click
+          click_on 'Update Logo Display'
           click_on 'Delivery'
           find('label', text: 'Embedded inline on your website').click
           fill_in('form_element_selector', with: 'test_selector')
@@ -251,10 +251,10 @@ feature 'Forms', js: true do
 
         it 'can upload and display a `banner` logo' do
           within('.usa-file-input') do
-            attach_file('form_logo', 'spec/fixtures/touchpoints-banner.png')
+            attach_file('form_logo', 'spec/fixtures/files/touchpoints-banner.png')
           end
-          find('label', text: 'Display small banner (320px wide by 80px tall) logo?').click
-          click_on 'Update logo'
+          find('label', text: 'Display as banner (320px wide by 80px tall)').click
+          click_on 'Update Logo Display'
           click_on 'Delivery'
           find('label', text: 'Embedded inline on your website').click
           fill_in('form_element_selector', with: 'test_selector')
@@ -1442,6 +1442,31 @@ feature 'Forms', js: true do
               expect(page).to have_content('Edited Question Option Text (100)')
               expect(find_all('.question-option-view').first).to have_content('Edited Question Option Text (100)')
             end
+          end
+        end
+
+        describe 'reordering Question Options' do
+          let!(:question) { FactoryBot.create(:question, :with_combobox_options, form:, form_section: form.form_sections.first) }
+
+          before do
+            visit questions_admin_form_path(form)
+            wait_for_builder
+            source = find('.question-option', text: 'One')
+            target = find('.question-option', text: 'Two')
+            source.drag_to(target)
+            wait_for_ajax
+          end
+
+          it 'moves the first question option down' do
+            expect(page.all('.question-option')[0]).to have_content('Two')
+            expect(page.all('.question-option')[1]).to have_content('One')
+          end
+
+          it 'persists after refresh' do
+            visit questions_admin_form_path(form)
+            wait_for_builder
+            expect(page.all('.question-option')[0]).to have_content('Two')
+            expect(page.all('.question-option')[1]).to have_content('One')
           end
         end
       end

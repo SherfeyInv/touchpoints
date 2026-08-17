@@ -62,6 +62,7 @@ zh-CN:
     field_is_invalid: 请输入一个有效的值
     chars_remaining: "剩餘字符: "
     enter_other_text: "输入其他文字"
+    turnstile_complete_captcha: "需要进行安全验证。"
   header:
     official: "美国政府的官方网站"
     heres_how_you_know: "这就是你所知道的"
@@ -156,7 +157,7 @@ zh-CN:
   errors:
     format: "%{attribute}%{message}"
     request:
-      unauthorized_host: "来自非授权主机的请求"
+      try_again: "请重试。"
     messages:
       accepted: 必须是可被接受的
       blank: 不能为空字符

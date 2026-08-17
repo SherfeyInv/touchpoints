@@ -2,8 +2,21 @@ en:
   errors:
     format: "%{attribute} %{message}"
     request:
-      unauthorized_host: "request made from non-authorized host"
+      try_again: "Please try again."
     messages:
+      carrierwave_processing_error: failed to be processed
+      carrierwave_integrity_error: is not of an allowed file type
+      carrierwave_download_error: could not be downloaded
+      extension_allowlist_error: "You are not allowed to upload %{extension} files, allowed types: %{allowed_types}"
+      content_type_allowlist_error: "You are not allowed to upload %{content_type} files, allowed types: %{allowed_types}"
+      content_type_denylist_error: "You are not allowed to upload %{content_type} files"
+      processing_error: "Failed to manipulate, maybe it is not an image?"
+      min_size_error: "File size should be greater than %{min_size}"
+      max_size_error: "File size should be less than %{max_size}"
+      min_width_error: "Image width should be greater than %{min_width}px"
+      max_width_error: "Image width should be less than %{max_width}px"
+      min_height_error: "Image height should be greater than %{min_height}px"
+      max_height_error: "Image height should be less than %{max_height}px"
       accepted: must be accepted
       blank: can't be blank
       confirmation: doesn't match %{attribute}
@@ -164,6 +177,7 @@ en:
     sign_up_text: Any federal employee with a .gov or .mil email address can use Touchpoints. Your account will be automatically created the first time you sign in.
     sign_in_text: Touchpoints uses Login.gov to handle user accounts. Once you authenticate with Login.gov, you will be signed in and redirected back to Touchpoints.
     sign_in_with: Sign in with
+    invalid_login_account: "This Login.gov account cannot be used to access Touchpoints because it is not associated with a verified .gov or .mil email address. If you are a government employee, please follow <a href='https://login.gov/help/manage-your-account/change-your-email-address/'>these instructions</a> to add your work email to this account, or sign in with a different Login.gov account that uses your work email."
   the_feedback_and_analytics_team: " the Feedback and Analytics Team"
   characters_allowed: "characters allowed"
   characters_left: "characters left"
@@ -184,6 +198,7 @@ en:
     field_is_invalid: "Please enter a valid value: "
     chars_remaining: "Chars remaining: "
     enter_other_text: "Enter other text"
+    turnstile_complete_captcha: "Security verification is required."
   header:
     official: "An official website of the United States government"
     heres_how_you_know: "Here’s how you know"

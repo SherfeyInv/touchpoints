@@ -222,15 +222,25 @@ workflows:
           filters:
             branches:
               only:
-                - production
+                - main
     jobs:
       - cron_tasks
   build-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /^v\d{4}\.\d{2}\.\d{2}\.\d+$/
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /^v\d{4}\.\d{2}\.\d{2}\.\d+$/
       - deploy:
           name: deploy-to-staging
           deploy_environment: staging
@@ -239,16 +249,9 @@ workflows:
           filters:
             branches:
               only:
-                - develop
-      - deploy:
-          name: deploy-to-demo
-          deploy_environment: demo
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - production
+                - main
+            tags:
+              ignore: /.*/
       - deploy:
           name: deploy-to-production
           deploy_environment: production
@@ -256,5 +259,6 @@ workflows:
             - test
           filters:
             branches:
-              only:
-                - production
+              ignore: /.*/
+            tags:
+              only: /^v\d{4}\.\d{2}\.\d{2}\.\d+$/

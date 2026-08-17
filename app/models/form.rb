@@ -40,6 +40,14 @@ class Form < ApplicationRecord
 
   mount_uploader :logo, LogoUploader
 
+  enum :header_logo_display, { banner: 'banner', square: 'square' }, default: 'banner', prefix: true
+
+  def logo_alt_text_or_default
+    return logo_alt_text if logo_alt_text.present?
+
+    "#{organization&.name} logo"
+  end
+
   def self.my_forms(user, aasm_state)
     if user.organizational_form_approver?
       items = user.organization.forms
@@ -323,19 +331,22 @@ class Form < ApplicationRecord
           instructions: instructions,
           disclaimer_text: disclaimer_text,
           logo_url: if logo.present?
-                      if display_header_logo
+                      case header_logo_display
+                      when 'banner'
                         logo.tag.url
-                      elsif display_header_square_logo
+                      when 'square'
                         logo.logo_square.url
                       end
                     end,
           logo_class: if logo.present?
-                        if display_header_logo
+                        case header_logo_display
+                        when 'banner'
                           'form-header-logo'
-                        elsif display_header_square_logo
+                        when 'square'
                           'form-header-logo-square'
                         end
                       end,
+          logo_alt_text: (logo_alt_text_or_default if logo.present?),
           questions: ordered_questions.map do |q|
             {
               answer_field: q.answer_field,

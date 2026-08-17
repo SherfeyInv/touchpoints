@@ -21,19 +21,19 @@ module Api
           .page(page_number)
           .per(page_size)
 
-        production_api_path = "https://api.gsa.gov/analytics/touchpoints#{request.path.gsub('/api', '')}"
-
         respond_to do |format|
           format.json do
             render json: cx_responses, each_serializer: CxResponseSerializer,
               meta: {
                 current_page: cx_responses.current_page,
                 size: cx_responses.size,
+                page_size: cx_responses.limit_value,
                 total_pages: cx_responses.total_pages,
                 total_count: cx_responses.total_count,
               },
               links: {
-                self: Rails.env.production? ? production_api_path : nil
+                # If request came through the API gateway, pagination links should be written wrt the gateway url
+                self: from_api_gateway? ? api_gateway_url : nil,
               }
           end
         end

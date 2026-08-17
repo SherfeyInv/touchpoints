@@ -2,14 +2,16 @@
 <% @disclaimer_text_limit = 1000 %>
 <%= javascript_include_tag "quill.js" %>
 <%= stylesheet_link_tag "quill-snow.css" %>
-<%= render 'admin/forms/logo_display', { form: form } %>
+<div id="display-logo-div">
+  <%= render 'admin/forms/logo_display', { form: form } %>
+</div>
 <hr
   class="margin-top-3 margin-bottom-3"
   style="border: none; border-top: 3px solid #E5E5E5;">
 <div class="form-title-edit">
   <label
     class="text-uppercase font-body-3xs"
-    for="form_builder_title"">
+    for="form_builder_title">
     Form title
   </label>
   <input type="text"
@@ -274,33 +276,9 @@ $(function() {
 
   // Initialize sortable for question options
   try {
-    $(".question-options").sortable({
-      items: '.question-option',
-      handle: '.drag-handle',
-      placeholder: 'sort-placeholder',
-      update: function(e, ui) {
-        try {
-          var url = $(this).parent().data("url");
-          if (!url) {
-            console.error("Missing URL for question options sort");
-            return;
-          }
-          $.ajax({
-            url: url,
-            type: "PATCH",
-            data: $(this).sortable('serialize'),
-            error: function(xhr, status, error) {
-              console.error("Option sort update failed:", error);
-              ui.item.animate({ left: 0 }, 300);
-            }
-          });
-        } catch (err) {
-          console.error("Error during option sort update:", err);
-        }
-      }
-    }).disableSelection();
+    initializeSortableQuestionOptions($(".question-options"));
   } catch (err) {
-    console.error("Failed to initialize option sortable:", err);
+    console.error("Failed to initialize question option sortable:", err);
   }
 
   // Initialize sortable for sections
@@ -444,6 +422,39 @@ function initializeSortableQuestions($questionContainer) {
         ui.placeholder.height(ui.item.height());
       }
     }).disableSelection();
+}
+
+function initializeSortableQuestionOptions($questionOptionContainer) {
+  $questionOptionContainer.sortable({
+    items: '.question-option',
+    placeholder: 'sort-placeholder',
+    tolerance: 'pointer',
+    update: function(e, ui) {
+      try {
+        let url = $(this).parent().data("url") + "/sort";
+        let data = $(this).sortable('serialize');
+        if (!url) {
+          console.error("Missing URL for question options sort");
+          return;
+        }
+        if (!data) {
+          console.error("Failed to serialize sortable data");
+          return;
+        }
+        $.ajax({
+          url: url,
+          type: "PATCH",
+          data: data,
+          error: () => {
+            alert("Failed to update question option order");
+            $(this).sortable("cancel");
+          }
+        });
+      } catch (err) {
+        console.error("Error during option sort update:", err);
+      }
+    }
+  }).disableSelection();
 }
 
 document.addEventListener("DOMContentLoaded", function () {

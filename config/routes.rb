@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/admin/sidekiq'
   end
 
+  mount Rswag::Ui::Engine => '/api-docs' if Rails.env.development?
   get 'hello_stimulus', to: 'site#hello_stimulus', as: :hello_stimulus if Rails.env.development?
   get 'docs', to: 'site#docs', as: :docs if Rails.env.development?
   get 'benchmark/widget', to: 'benchmark#widget_benchmark' if Rails.env.development?
@@ -37,17 +38,20 @@ Rails.application.routes.draw do
     resources :submissions, only: %i[new create]
   end
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v0 do
       resources :forms, only: %i[index show]
     end
     namespace :v1 do
       resources :organizations, only: [:index]
-      resources :collections, only: [:index]
       resources :cx_responses, only: [:index]
       resources :cx_collections, only: [:index]
       resources :cx_collection_details, only: [:index]
-      resources :forms, only: %i[index show]
+      resources :forms, only: %i[index show] do
+        member do
+          get :responses, to: 'forms#responses'
+        end
+      end
       resources :websites, only: [:index]
       resources :service_providers, only: [:index]
       resources :services, only: %i[index show]
@@ -299,6 +303,7 @@ Rails.application.routes.draw do
         patch 'update_disclaimer_text', to: 'forms#update_disclaimer_text', as: :update_disclaimer_text
         patch 'update_success_text', to: 'forms#update_success_text', as: :update_success_text
         patch 'update_display_logo', to: 'forms#update_display_logo', as: :update_display_logo
+        delete 'remove_logo', to: 'forms#remove_logo', as: :remove_logo
         patch 'update_notification_emails', to: 'forms#update_notification_emails', as: :update_notification_emails
         patch 'update_admin_options', to: 'forms#update_admin_options', as: :update_admin_options
         patch 'update_form_manager_options', to: 'forms#update_form_manager_options', as: :update_form_manager_options
@@ -313,17 +318,15 @@ Rails.application.routes.draw do
         patch 'update_title', to: 'form_sections#update_title', as: :inline_update
       end
       resources :questions, except: :new do
-        member do
-          patch 'question_options', to: 'question_options#sort', as: :sort_question_options
+        collection do
+          patch 'sort', to: 'questions#sort', as: :sort_questions
         end
         resources :question_options, except: %i[index show] do
           patch 'update_title', to: 'question_options#update_title', as: :inline_update
           collection do
             post 'create_other', to: 'question_options#create_other', as: :create_other
+            patch 'sort', to: 'question_options#sort', as: :sort_question_options
           end
-        end
-        collection do
-          patch 'sort', to: 'questions#sort', as: :sort_questions
         end
       end
       resources :submissions, only: %i[show update destroy] do

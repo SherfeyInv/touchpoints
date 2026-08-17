@@ -13,6 +13,7 @@ require 'selenium/webdriver'
 require 'axe-rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 require_relative 'support/touchpoints_spec_helpers'
+require_relative 'support/rswag_shared_context'
 
 # Ensure Devise mapping exists for controller specs when routes fail to auto-register.
 if defined?(Devise) && Devise.mappings[:user].nil?
@@ -64,7 +65,7 @@ Capybara.raise_server_errors = true
 Capybara.server = :puma
 Capybara.server_host = '127.0.0.1'
 Capybara.server_port = 3000
-Capybara.app_host = 'http://127.0.0.1:3000'
+Capybara.app_host = 'http://localhost:3000'
 
 TEST_API_KEY = '1234567890123456789012345678901234567890'
 
